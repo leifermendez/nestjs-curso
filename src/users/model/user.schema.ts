@@ -6,10 +6,18 @@ export type UserDocument = User & Document;
 @Schema({ timestamps: true })
 export class User {
   @Prop({ required: true, unique: true })
-  emil: string;
+  email: string;
 
   @Prop()
   password: string;
+
+  @Prop({
+    default:['user']
+  })
+  roles: string[];
+
+  @Prop()
+  name: string;
 
   @Prop()
   avatar: string;

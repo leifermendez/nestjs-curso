@@ -1,5 +1,9 @@
-import { Controller, Get, Post, Body, HttpCode, HttpException, HttpStatus, Param, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, HttpCode,  Param, ParseIntPipe, UseGuards, Req, Delete } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Request } from 'express';
+import { Rol } from 'src/decorators/rol.decorator';
+import { JwtGuardGuard } from 'src/guards/jwt-guard.guard';
+import { RolesGuardGuard } from 'src/guards/roles-guard.guard';
 import { CoursesService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
@@ -7,21 +11,30 @@ import { SlugPipe } from './pipes/slug.pipe';
 
 @ApiTags('courses')
 
-@Controller('courses') //TODO http://localhost:3000/v1/courses
+@UseGuards(JwtGuardGuard, RolesGuardGuard)
+@Controller('courses')
 export class CoursesController {
   constructor(private readonly coursesService: CoursesService) {}
 
   @Post()
   @HttpCode(201)
-  create(@Body() create:CreateCourseDto){
+  @Rol(['admin'])
+  create(@Req() req:Request,  @Body() create:CreateCourseDto){
     return this.coursesService.create(create)
   }
 
-  @Get(':title')
-  getDetail(@Param('title', new SlugPipe()) title:string){//TODO el mejor libro del mundo
-    //TODO el-mejor-libro-del-mundo
-    console.log('___TITLE____',title)
-    return this.coursesService.findOne(1)
+  @Get('')
+  @HttpCode(200)
+  @Rol(['admin','user','manager'])
+  getListCourses() {
+    return this.coursesService.findAll()
+  }
+
+  @Delete(':id')
+  @HttpCode(200)
+  @Rol(['admin','user','manager'])
+  deleteCourse(@Param('id') id:string) {
+    return this.coursesService.remove(id)
   }
 
 }

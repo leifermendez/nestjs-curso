@@ -1,15 +1,33 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model, Types } from 'mongoose';
+import { User, UserDocument } from 'src/users/model/user.schema';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
+import { Course, CourseDocument } from './model/courses.schema';
 
+interface ModelExt<T> extends Model<T> {
+  delete:Function
+}
 @Injectable()
 export class CoursesService {
-  create(createCourseDto: CreateCourseDto) {
-    return createCourseDto;
+
+  constructor(
+    @InjectModel(Course.name) private readonly courseModel:ModelExt<CourseDocument>,
+    @InjectModel(User.name) private readonly userModel:ModelExt<UserDocument>,
+    ){
+
   }
 
-  findAll() {
-    return `This action returns all courses`;
+
+  create(createCourseDto: CreateCourseDto) {
+    const user = this.userModel.find()
+    return this.courseModel.create(createCourseDto)
+  }
+
+  async findAll() {
+    const list = this.courseModel.find({})
+    return list
   }
 
   findOne(id: number) {
@@ -20,7 +38,9 @@ export class CoursesService {
     return `This action updates a #${id} course`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} course`;
+  async remove(id: string) {
+    const _id = new Types.ObjectId(id)
+    const response = this.courseModel.delete({_id})
+    return response
   }
 }

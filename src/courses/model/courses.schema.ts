@@ -12,8 +12,8 @@ export class Course {
   @Prop()
   price: number;
 
-  @Prop()
-  idAuthor:mongoose.Types.ObjectId;
+  // @Prop()
+  // idAuthor:mongoose.Types.ObjectId;
 
   @Prop()
   description: string;
