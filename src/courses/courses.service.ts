@@ -7,7 +7,8 @@ import { UpdateCourseDto } from './dto/update-course.dto';
 import { Course, CourseDocument } from './model/courses.schema';
 
 interface ModelExt<T> extends Model<T> {
-  delete:Function
+  delete:Function;
+  findAllCourses:Function
 }
 @Injectable()
 export class CoursesService {
@@ -26,16 +27,18 @@ export class CoursesService {
   }
 
   async findAll() {
-    const list = this.courseModel.find({})
-    return list
+    return this.courseModel.findAllCourses()
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} course`;
+  async findOne(id: string) {
+    return this.courseModel.findOne({id})
   }
 
-  update(id: number, updateCourseDto: UpdateCourseDto) {
-    return `This action updates a #${id} course`;
+  async update(id: string, updateCourseDto: UpdateCourseDto) {
+    return this.courseModel.findOneAndUpdate({id}, updateCourseDto, {
+      upsert:true,
+      new:true
+    })
   }
 
   async remove(id: string) {

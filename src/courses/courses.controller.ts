@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, HttpCode,  Param, ParseIntPipe, UseGuards, Req, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, HttpCode,  Param, UseGuards, Req, Delete, Patch } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { Rol } from 'src/decorators/rol.decorator';
@@ -28,6 +28,20 @@ export class CoursesController {
   @Rol(['admin','user','manager'])
   getListCourses() {
     return this.coursesService.findAll()
+  }
+
+  @Get(':id')
+  @HttpCode(200)
+  @Rol(['admin','user','manager'])
+  getDetail(@Param('id') id:string) {
+    return this.coursesService.findOne(id)
+  }
+
+  @Patch(':id')
+  @HttpCode(200)
+  @Rol(['admin'])
+  updateDetail(@Param('id') id:string, @Body() body:UpdateCourseDto) {
+    return this.coursesService.update(id, body)
   }
 
   @Delete(':id')
