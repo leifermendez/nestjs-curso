@@ -13,40 +13,33 @@ import { CoursesService } from 'src/courses/courses.service';
 @Controller('videos')
 export class VideosController {
   constructor(private readonly videosService: VideosService,
-    private readonly coursesService:CoursesService
     ) {}
 
   @Post()  
-  create(@Body() createVideoDto: CreateVideoDto) {
-    console.log(createVideoDto)
+  @UseInterceptors(FileInterceptor('file', {storage}))
+  create(@Body() createVideoDto: CreateVideoDto, @UploadedFile() file:Express.Multer.File) {
+    console.log(file)
     return this.videosService.create(createVideoDto);
   }
 
-  @Post('upload') //TODO [POST] http://localhost:3000/v1/videos/upload
-  @UseInterceptors(FileInterceptor('avatar', {storage}))
-  handleUpload(@UploadedFile() file:Express.Multer.File){
-
-    console.log(file)
-  }
 
   @Get() 
-  findAll(@Query('id') id:string) {
+  findAll() {
     return this.videosService.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    console.log('Que tengo aqui?',id)
-    return this.videosService.findOne(+id);
+    return this.videosService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateVideoDto: UpdateVideoDto) {
-    return this.videosService.update(+id, updateVideoDto);
+    return this.videosService.update(id, updateVideoDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.videosService.remove(+id);
+    return this.videosService.remove(id);
   }
 }

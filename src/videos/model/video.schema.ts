@@ -5,7 +5,7 @@ export type VideoDocument = Video & Document;
 
 @Schema({ timestamps: true })
 export class Video {
-    @Prop({ unique: true, default: uuidv4() })
+    @Prop({ unique: true, default: uuidv4 })
     id: string;
 
     @Prop()

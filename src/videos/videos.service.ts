@@ -1,27 +1,41 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { CreateVideoDto } from './dto/create-video.dto';
 import { UpdateVideoDto } from './dto/update-video.dto';
+import { Video, VideoDocument } from './model/video.schema';
 
 @Injectable()
 export class VideosService {
-  
+  constructor(
+    @InjectModel(Video.name)
+    private readonly videoModel: ModelExt<VideoDocument>,
+  ) {}
+
   create(createVideoDto: CreateVideoDto) {
-    return 'This action adds a new video';
+    return this.videoModel.create(createVideoDto);
   }
 
   findAll() {
-    return `This action returns all videos`;
+    return this.videoModel.find({})
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} video`;
+  findOne(id: string) {
+    return this.videoModel.findOne({ id });
   }
 
-  update(id: number, updateVideoDto: UpdateVideoDto) {
-    return `This action updates a #${id} video`;
+  update(id: string, updateVideoDto: UpdateVideoDto) {
+    return this.videoModel.findOneAndUpdate({ id }, updateVideoDto, {
+      new: true,
+      upsert: true,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} video`;
+  remove(id: string) {
+    return this.videoModel.delete({ id });
   }
+}
+
+interface ModelExt<T> extends Model<T> {
+  delete: Function;
 }
