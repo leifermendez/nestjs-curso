@@ -5,22 +5,22 @@ export type VideoDocument = Video & Document;
 
 @Schema({ timestamps: true })
 export class Video {
-    @Prop({ unique: true, default: uuidv4 })
-    id: string;
+  @Prop({ unique: true, default: uuidv4 })
+  id: string;
 
-    @Prop()
-    title:string;
+  @Prop()
+  title: string;
 
-    @Prop()
-    idCourse:mongoose.Types.ObjectId;
+  @Prop({ required: true })
+  idCourse: string;
 
-    @Prop()
-    description:string;
+  @Prop()
+  description: string;
 
-    @Prop()
-    source:string;
+  @Prop({default:null})
+  source: string;
 
-    @Prop()
-    score:number;
+  @Prop({default:0})
+  score: number;
 }
 export const VideoSchema = SchemaFactory.createForClass(Video);

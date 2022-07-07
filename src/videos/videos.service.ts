@@ -16,8 +16,19 @@ export class VideosService {
     return this.videoModel.create(createVideoDto);
   }
 
+  addVideo(id: string, filename: string) {
+    return this.videoModel.findOneAndUpdate(
+      { id },
+      { source: filename },
+      {
+        new: true,
+        upsert: true,
+      },
+    );
+  }
+
   findAll() {
-    return this.videoModel.find({})
+    return this.videoModel.find({});
   }
 
   findOne(id: string) {

@@ -6,7 +6,7 @@ export type CourseDocument = Course & Document;
 
 @Schema()
 export class Course {
-  @Prop({ unique: true, default: uuidv4() })
+  @Prop({ unique: true, default: uuidv4 })
   id: string;
 
   @Prop({required:true})
