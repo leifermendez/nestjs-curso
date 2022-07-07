@@ -5,7 +5,7 @@ export type AwardsDocument = Awards & Document;
 
 @Schema({ timestamps: true })
 export class Awards {
-    @Prop({ unique: true, default: uuidv4() })
+    @Prop({ unique: true, default: uuidv4 })
     id: string;
 
     @Prop()

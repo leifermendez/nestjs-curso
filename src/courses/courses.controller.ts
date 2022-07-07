@@ -4,6 +4,7 @@ import { Request } from 'express';
 import { Rol } from 'src/decorators/rol.decorator';
 import { JwtGuardGuard } from 'src/guards/jwt-guard.guard';
 import { RolesGuardGuard } from 'src/guards/roles-guard.guard';
+import { PaginationQuery } from 'src/pagination-query.decorator';
 import { CoursesService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
@@ -26,8 +27,8 @@ export class CoursesController {
   @Get('')
   @HttpCode(200)
   @Rol(['admin','user','manager'])
-  getListCourses() {
-    return this.coursesService.findAll()
+  getListCourses(@PaginationQuery() pagination:any) {
+    return this.coursesService.findAll(pagination)
   }
 
   @Get(':id')

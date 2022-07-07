@@ -8,7 +8,8 @@ import { Course, CourseDocument } from './model/courses.schema';
 
 interface ModelExt<T> extends Model<T> {
   delete:Function;
-  findAllCourses:Function
+  paginate:Function;
+  findAllCourses:Function;
 }
 @Injectable()
 export class CoursesService {
@@ -26,8 +27,8 @@ export class CoursesService {
     return this.courseModel.create(createCourseDto)
   }
 
-  async findAll() {
-    return this.courseModel.findAllCourses()
+  async findAll(pagination) {
+    return this.courseModel.paginate({}, pagination)
   }
 
   async findOne(id: string) {
