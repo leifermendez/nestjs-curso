@@ -13,11 +13,13 @@ import {
   CacheInterceptor,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { Request } from 'express';
 import { Rol } from 'src/decorators/rol.decorator';
 import { JwtGuardGuard } from 'src/guards/jwt-guard.guard';
 import { RolesGuardGuard } from 'src/guards/roles-guard.guard';
 import { PaginateV2 } from 'src/paginate-v2.decorator';
 import { CoursesService } from './courses.service';
+import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 
 @ApiTags('courses')
@@ -29,7 +31,7 @@ export class CoursesController {
   @Post()
   @HttpCode(201)
   @Rol(['admin'])
-  create(@Req() req: Request, @Body() create: CreateCourseDto) {
+  create(@Req() _req: Request, @Body() create: CreateCourseDto) {
     return this.coursesService.create(create);
   }
 
