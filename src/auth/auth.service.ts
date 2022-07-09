@@ -12,7 +12,7 @@ import { compareHash, generateHash } from './utils/handleBcrypt';
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
-    private readonly eventEmitter:EventEmitter2,
+    private readonly eventEmitter: EventEmitter2,
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
   ) {}
 
@@ -42,10 +42,9 @@ export class AuthService {
 
     const token = this.jwtService.sign(payload);
 
-    
     const data = {
-        token,
-        user: userFlat,
+      token,
+      user: userFlat,
     };
     this.eventEmitter.emit('user.login', data);
 
@@ -54,8 +53,8 @@ export class AuthService {
 
   /**
    * Registrar un usuario
-   * @param userBody 
-   * @returns 
+   * @param userBody
+   * @returns
    */
   public async register(userBody: RegisterAuthDto) {
     const { password, ...user } = userBody;
@@ -65,15 +64,14 @@ export class AuthService {
       password: await generateHash(password),
     };
 
-    const newUser = await this.userModel.create(userParse)
+    const newUser = await this.userModel.create(userParse);
 
     /**
      * Enviar (evento) de email
      */
 
-     this.eventEmitter.emit('user.created', newUser);
-      
+    this.eventEmitter.emit('user.created', newUser);
 
-    return newUser
+    return newUser;
   }
 }

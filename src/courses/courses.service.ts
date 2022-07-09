@@ -7,9 +7,8 @@ import { UpdateCourseDto } from './dto/update-course.dto';
 import { Course, CourseDocument } from './model/courses.schema';
 
 interface ModelExt<T> extends Model<T> {
-  delete: Function;
-  paginate: Function;
-  findAllCourses: Function;
+  delete: (data: { _id: Types.ObjectId }) => void;
+  paginate: (query: any, pagination: any) => void;
 }
 @Injectable()
 export class CoursesService {
@@ -20,11 +19,10 @@ export class CoursesService {
   ) {}
 
   create(createCourseDto: CreateCourseDto) {
-    const user = this.userModel.find();
     return this.courseModel.create(createCourseDto);
   }
 
-  async findAll(pagination:any) {
+  async findAll(pagination: any) {
     return this.courseModel.paginate({}, pagination);
   }
 

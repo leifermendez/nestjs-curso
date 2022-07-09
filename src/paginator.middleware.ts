@@ -10,7 +10,7 @@ export class PaginatorMiddleware implements NestMiddleware {
      */
 
     const { page = 0, limit = 10 } = req.query;
-    console.log(req.query)
+    console.log(req.query);
     req.pagination = { page, limit };
 
     next();

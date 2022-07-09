@@ -48,5 +48,5 @@ export class VideosService {
 }
 
 interface ModelExt<T> extends Model<T> {
-  delete: Function;
+  delete: (data: { id: string }) => void;
 }

@@ -1,12 +1,10 @@
 import { MongooseModule } from '@nestjs/mongoose';
-import { CacheInterceptor, MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { CoursesService } from './courses.service';
 import { CoursesController } from './courses.controller';
 import { Course, CourseSchema } from './model/courses.schema';
 import { User, UserSchema } from 'src/users/model/user.schema';
-import { PaginatorMiddleware } from 'src/paginator.middleware';
 import { PaginationV2Middleware } from 'src/pagination-v2.middleware';
-import { APP_INTERCEPTOR } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -27,9 +25,9 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
   exports: [CoursesService],
 })
 export class CoursesModule {
-  configure(consumer: MiddlewareConsumer){
+  configure(consumer: MiddlewareConsumer) {
     consumer
-    .apply(PaginationV2Middleware)
-    .forRoutes({ path: 'v1/courses', method: RequestMethod.GET });
+      .apply(PaginationV2Middleware)
+      .forRoutes({ path: 'v1/courses', method: RequestMethod.GET });
   }
 }

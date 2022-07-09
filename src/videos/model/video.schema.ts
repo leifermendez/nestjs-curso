@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { Document } from 'mongoose';
+import { Document } from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
 export type VideoDocument = Video & Document;
 
@@ -17,10 +17,10 @@ export class Video {
   @Prop()
   description: string;
 
-  @Prop({default:null})
+  @Prop({ default: null })
   source: string;
 
-  @Prop({default:0})
+  @Prop({ default: 0 })
   score: number;
 }
 export const VideoSchema = SchemaFactory.createForClass(Video);

@@ -10,14 +10,12 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
-  handleRegister(@Body() registerBody:RegisterAuthDto){
-    return this.authService.register(registerBody)
+  handleRegister(@Body() registerBody: RegisterAuthDto) {
+    return this.authService.register(registerBody);
   }
 
   @Post('login')
-  handleLogin(@Body() loginBody:LoginAuthDto){
-    return this.authService.login(loginBody)
+  handleLogin(@Body() loginBody: LoginAuthDto) {
+    return this.authService.login(loginBody);
   }
-
-
 }

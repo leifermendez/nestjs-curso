@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAwardDto } from './dto/create-award.dto';
-import { UpdateAwardDto } from './dto/update-award.dto';
 
 @Injectable()
 export class AwardsService {
-  create(createAwardDto: CreateAwardDto) {
+  create() {
     return 'This action adds a new award';
   }
 
@@ -16,7 +14,7 @@ export class AwardsService {
     return `This action returns a #${id} award`;
   }
 
-  update(id: number, updateAwardDto: UpdateAwardDto) {
+  update(id: number) {
     return `This action updates a #${id} award`;
   }
 

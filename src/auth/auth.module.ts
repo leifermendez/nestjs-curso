@@ -7,22 +7,23 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategy/jwt.strategy';
 
 @Module({
-  imports:[
+  imports: [
     JwtModule.registerAsync({
-      useFactory:() => {
+      useFactory: () => {
         return {
           signOptions: { expiresIn: '4d' },
-          secret: process.env.JWT_SECRET
-        }
-      }
+          secret: process.env.JWT_SECRET,
+        };
+      },
     }),
     MongooseModule.forFeature([
       {
-        name:User.name,schema:UserSchema
-      }
-    ])
+        name: User.name,
+        schema: UserSchema,
+      },
+    ]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy]
+  providers: [AuthService, JwtStrategy],
 })
 export class AuthModule {}

@@ -5,17 +5,16 @@ export type AwardsDocument = Awards & Document;
 
 @Schema({ timestamps: true })
 export class Awards {
-    @Prop({ unique: true, default: uuidv4 })
-    id: string;
+  @Prop({ unique: true, default: uuidv4 })
+  id: string;
 
-    @Prop()
-    title:string;
+  @Prop()
+  title: string;
 
-    @Prop()
-    idUser:mongoose.Types.ObjectId;
+  @Prop()
+  idUser: mongoose.Types.ObjectId;
 
-    @Prop()
-    description:string
-
+  @Prop()
+  description: string;
 }
 export const AwardsSchema = SchemaFactory.createForClass(Awards);
