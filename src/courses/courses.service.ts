@@ -7,44 +7,41 @@ import { UpdateCourseDto } from './dto/update-course.dto';
 import { Course, CourseDocument } from './model/courses.schema';
 
 interface ModelExt<T> extends Model<T> {
-  delete:Function;
-  paginate:Function;
-  findAllCourses:Function;
+  delete: Function;
+  paginate: Function;
+  findAllCourses: Function;
 }
 @Injectable()
 export class CoursesService {
-
   constructor(
-    @InjectModel(Course.name) private readonly courseModel:ModelExt<CourseDocument>,
-    @InjectModel(User.name) private readonly userModel:ModelExt<UserDocument>,
-    ){
-
-  }
-
+    @InjectModel(Course.name)
+    private readonly courseModel: ModelExt<CourseDocument>,
+    @InjectModel(User.name) private readonly userModel: ModelExt<UserDocument>,
+  ) {}
 
   create(createCourseDto: CreateCourseDto) {
-    const user = this.userModel.find()
-    return this.courseModel.create(createCourseDto)
+    const user = this.userModel.find();
+    return this.courseModel.create(createCourseDto);
   }
 
-  async findAll(pagination) {
-    return this.courseModel.paginate({}, pagination)
+  async findAll(pagination:any) {
+    return this.courseModel.paginate({}, pagination);
   }
 
   async findOne(id: string) {
-    return this.courseModel.findOne({id})
+    return this.courseModel.findOne({ id });
   }
 
   async update(id: string, updateCourseDto: UpdateCourseDto) {
-    return this.courseModel.findOneAndUpdate({id}, updateCourseDto, {
-      upsert:true,
-      new:true
-    })
+    return this.courseModel.findOneAndUpdate({ id }, updateCourseDto, {
+      upsert: true,
+      new: true,
+    });
   }
 
   async remove(id: string) {
-    const _id = new Types.ObjectId(id)
-    const response = this.courseModel.delete({_id})
-    return response
+    const _id = new Types.ObjectId(id);
+    const response = this.courseModel.delete({ _id });
+    return response;
   }
 }

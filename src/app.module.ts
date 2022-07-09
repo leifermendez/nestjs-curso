@@ -1,5 +1,5 @@
 import { MongooseModule } from '@nestjs/mongoose';
-import { Module } from '@nestjs/common';
+import { CacheInterceptor, CacheModule, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CoursesModule } from './courses/courses.module';
@@ -13,6 +13,7 @@ import { UsersModule } from './users/users.module';
 import { EventMailModule } from './event-mail/event-mail.module';
 import { EventEmitter2, EventEmitterModule } from '@nestjs/event-emitter';
 import { MailModule } from './mail/mail.module';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -21,6 +22,11 @@ import { MailModule } from './mail/mail.module';
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
+    }),
+    CacheModule.register({
+      ttl:3600,
+      max:1000,
+      isGlobal:true
     }),
     EventEmitterModule.forRoot(),
     MongooseModule.forRoot(process.env.DB_URI,{
@@ -38,6 +44,9 @@ import { MailModule } from './mail/mail.module';
     MailModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+ 
+  ],
 })
 export class AppModule {}

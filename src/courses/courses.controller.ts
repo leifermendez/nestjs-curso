@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Body, HttpCode,  Param, UseGuards, Req, Delete, Patch } from '@nestjs/common';
+import { Controller, Get, Post, Body, HttpCode,  Param, UseGuards, Req, Delete, Patch, UseInterceptors, CacheInterceptor, Inject, CACHE_MANAGER } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Cache } from 'cache-manager';
 import { Request } from 'express';
 import { Rol } from 'src/decorators/rol.decorator';
 import { JwtGuardGuard } from 'src/guards/jwt-guard.guard';
 import { RolesGuardGuard } from 'src/guards/roles-guard.guard';
+import { PaginateV2 } from 'src/paginate-v2.decorator';
 import { PaginationQuery } from 'src/pagination-query.decorator';
 import { CoursesService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
@@ -15,7 +17,10 @@ import { SlugPipe } from './pipes/slug.pipe';
 @UseGuards(JwtGuardGuard, RolesGuardGuard)
 @Controller('courses')
 export class CoursesController {
-  constructor(private readonly coursesService: CoursesService) {}
+  constructor(
+
+    private readonly coursesService: CoursesService
+    ) {}
 
   @Post()
   @HttpCode(201)
@@ -24,10 +29,11 @@ export class CoursesController {
     return this.coursesService.create(create)
   }
 
-  @Get('')
+  @Get('')//TODO la lista
   @HttpCode(200)
+  @UseInterceptors(CacheInterceptor)
   @Rol(['admin','user','manager'])
-  getListCourses(@PaginationQuery() pagination:any) {
+  getListCourses(@PaginateV2() pagination:any) {
     return this.coursesService.findAll(pagination)
   }
 

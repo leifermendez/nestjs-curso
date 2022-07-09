@@ -5,6 +5,9 @@ import { json } from 'express';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
+
+  const PORT = process.env.PORT || 3000
+
   const app = await NestFactory.create(AppModule,{
     cors:true
   });
@@ -29,8 +32,8 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('documentation', app, document);
-  console.log('___ENV___',process.env.PORT)
+
   app.useGlobalPipes(new ValidationPipe());
-  await app.listen(3000);
+  await app.listen(PORT);
 }
 bootstrap();
