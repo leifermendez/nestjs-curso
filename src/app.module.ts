@@ -13,6 +13,7 @@ import { UsersModule } from './users/users.module';
 import { EventMailModule } from './event-mail/event-mail.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { MailModule } from './mail/mail.module';
+import { SocketProvider } from './providers/socket-provider';
 
 @Module({
   imports: [
@@ -45,6 +46,6 @@ import { MailModule } from './mail/mail.module';
     MailModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, SocketProvider],
 })
 export class AppModule {}

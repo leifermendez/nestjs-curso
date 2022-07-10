@@ -1,3 +1,4 @@
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -10,10 +11,13 @@ export class VideosService {
   constructor(
     @InjectModel(Video.name)
     private readonly videoModel: ModelExt<VideoDocument>,
+    private eventEmitter:EventEmitter2
   ) {}
 
-  create(createVideoDto: CreateVideoDto) {
-    return this.videoModel.create(createVideoDto);
+  async create(createVideoDto: CreateVideoDto) {
+    const video = await this.videoModel.create(createVideoDto)
+    this.eventEmitter.emit('video.created', video)
+    return video
   }
 
   addVideo(id: string, filename: string) {

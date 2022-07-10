@@ -4,7 +4,7 @@ import { CoursesService } from './courses.service';
 import { CoursesController } from './courses.controller';
 import { Course, CourseSchema } from './model/courses.schema';
 import { User, UserSchema } from 'src/users/model/user.schema';
-import { PaginationV2Middleware } from 'src/pagination-v2.middleware';
+import { PaginationV2Middleware } from 'src/middleware/pagination-v2.middleware';
 
 @Module({
   imports: [

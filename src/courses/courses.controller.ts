@@ -17,7 +17,7 @@ import { Request } from 'express';
 import { Rol } from 'src/decorators/rol.decorator';
 import { JwtGuardGuard } from 'src/guards/jwt-guard.guard';
 import { RolesGuardGuard } from 'src/guards/roles-guard.guard';
-import { PaginateV2 } from 'src/paginate-v2.decorator';
+import { PaginateV2 } from 'src/decorators/paginate-v2.decorator';
 import { CoursesService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
