@@ -6,34 +6,42 @@ import {
   WebSocketGateway,
   OnGatewayInit,
   WebSocketServer,
+  SubscribeMessage,
 } from '@nestjs/websockets';
+import { JwtHandle } from 'src/auth/utils/jwt-handle';
 
 @WebSocketGateway({
   cors: {
     origin: '*',
   },
 })
-export class SocketProvider
-  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
-{
+export class SocketProvider {
+  constructor(private jwtHandle: JwtHandle) {}
+
   @WebSocketServer() serverGlobal: Socket;
 
-  @OnEvent('video.created')
+  /**
+   * Esta funcion se encarga de esuchcar el evento "join" que emite el front (angular, react, vue)
+   */
+  @SubscribeMessage('join')
+  handleJoin(io: Socket, token: string) {
+    //TODO salas "rooms"
+    const { id } = this.jwtHandle.getIdByToken(token);
+    io.join(`__room__${id}`);
+
+    console.log('Se unio el dispositivo..', id)
+  }
+
+  @OnEvent('video.created') //TODO este evento proviene del eventEmitter
   getVideo(video: any) {
     this.serverGlobal.emit('video.created', video);
   }
 
-  afterInit(server: any) {
-    //TODO Se llama cuando se inicia el servicio de WS
-  }
-
-  handleConnection(client: any, ...args: any[]) {
-    //TODO Se llama cuando un cliente de conecta
-    console.log('_Un cliente se conecto_ID:', client.id);
-  }
-
-  handleDisconnect(client: any) {
-    //TODO cuando un cliente se desconecta
-    console.log('_Un cliente se desconecto_ID:', client.id);
+  @OnEvent('video_user.created') //frank41@test.io
+  sendVideosToUser(data: { video: any; id: string }) {
+    console.log(data)
+    this.serverGlobal
+      .to(`__room__${data.id}`)
+      .emit('video.created', data.video);
   }
 }

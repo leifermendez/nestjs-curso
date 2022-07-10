@@ -16,7 +16,9 @@ export class VideosService {
 
   async create(createVideoDto: CreateVideoDto) {
     const video = await this.videoModel.create(createVideoDto)
-    this.eventEmitter.emit('video.created', video)
+    // this.eventEmitter.emit('video.created', video)
+    const idUser = '62c5dad07d3cecafbf26cb5c';
+    this.eventEmitter.emit('video_user.created', {id:idUser,video})
     return video
   }
 
