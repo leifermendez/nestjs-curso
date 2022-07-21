@@ -3,8 +3,8 @@ import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { CoursesService } from './courses.service';
 import { CoursesController } from './courses.controller';
 import { Course, CourseSchema } from './model/courses.schema';
-import { User, UserSchema } from 'src/users/model/user.schema';
-import { PaginationV2Middleware } from 'src/middleware/pagination-v2.middleware';
+import { User, UserSchema } from '../users/model/user.schema';
+import { PaginationV2Middleware } from '../middleware/pagination-v2.middleware';
 
 @Module({
   imports: [

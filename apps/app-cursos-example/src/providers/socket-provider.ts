@@ -8,7 +8,7 @@ import {
   WebSocketServer,
   SubscribeMessage,
 } from '@nestjs/websockets';
-import { JwtHandle } from 'src/auth/utils/jwt-handle';
+import { JwtHandle } from '../auth/utils/jwt-handle';
 
 @WebSocketGateway({
   cors: {

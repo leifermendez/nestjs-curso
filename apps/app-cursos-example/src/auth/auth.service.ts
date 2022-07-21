@@ -1,12 +1,13 @@
+import { ClientProxy } from '@nestjs/microservices';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus, Inject } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User, UserDocument } from 'src/users/model/user.schema';
+import { compareHash, generateHash } from './utils/handleBcrypt';
+import { User, UserDocument } from '../users/model/user.schema';
 import { LoginAuthDto } from './dto/login-auth.dto';
 import { RegisterAuthDto } from './dto/register-auth.dto';
-import { compareHash, generateHash } from './utils/handleBcrypt';
 
 @Injectable()
 export class AuthService {
@@ -14,6 +15,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly eventEmitter: EventEmitter2,
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
+    @Inject('MAIL_SERVICE') private readonly clientMailService:ClientProxy
   ) {}
 
   /**
@@ -70,7 +72,7 @@ export class AuthService {
      * Enviar (evento) de email
      */
 
-    this.eventEmitter.emit('user.created', newUser);
+    this.clientMailService.emit('user.created', newUser);
 
     return newUser;
   }

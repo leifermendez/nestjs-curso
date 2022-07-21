@@ -1,4 +1,3 @@
-import { JwtGuardGuard } from 'src/guards/jwt-guard.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
   Controller,
@@ -16,9 +15,10 @@ import { VideosService } from './videos.service';
 import { CreateVideoDto } from './dto/create-video.dto';
 import { UpdateVideoDto } from './dto/update-video.dto';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
-import { storage } from 'src/utils/media.handle';
-import { RolesGuardGuard } from 'src/guards/roles-guard.guard';
-import { Rol } from 'src/decorators/rol.decorator';
+import { Rol } from '../decorators/rol.decorator';
+import { RolesGuardGuard } from '../guards/roles-guard.guard';
+import { JwtGuardGuard } from '../guards/jwt-guard.guard';
+import { storage } from '../utils/media.handle';
 
 @ApiTags('videos')
 @ApiBearerAuth()

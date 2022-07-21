@@ -1,7 +1,7 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { Module } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
-import { UserDocument } from 'src/users/model/user.schema';
+import { UserDocument } from '../users/model/user.schema';
 
 @Module({})
 export class EventMailModule {
