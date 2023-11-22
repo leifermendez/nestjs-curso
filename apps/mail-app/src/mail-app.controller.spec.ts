@@ -16,7 +16,7 @@ describe('MailAppController', () => {
 
   describe('root', () => {
     it('should return "Hello World!"', () => {
-      expect(mailAppController.getHello()).toBe('Hello World!');
+      expect(mailAppController.getMessageUser({a:'1'})).toBe('hello');
     });
   });
 });

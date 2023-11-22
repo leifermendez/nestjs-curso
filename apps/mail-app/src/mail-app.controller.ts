@@ -8,6 +8,7 @@ export class MailAppController {
 
   @MessagePattern('user.created')
   getMessageUser(data:any){
-    console.log('___ESTO_ES_EL_MICROSERVICE_', data)
+    return 'hello'
   }
+  
 }
