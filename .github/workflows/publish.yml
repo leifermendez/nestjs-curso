@@ -22,5 +22,28 @@ jobs:
 
       - name: Build image
         run: |
-          docker build . --tag ghcr.io/leifermendez/nestjs-curso:latest
-          docker push ghcr.io/leifermendez/nestjs-curso:latest
+            docker build . --tag ghcr.io/leifermendez/nestjs-curso:latest
+            docker push ghcr.io/leifermendez/nestjs-curso:latest
+
+  deploy:
+    needs: create-image-nest
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install sshpass
+        run: sudo apt-get install -y sshpass
+
+      - name: SSH into Server
+        run: |
+          sshpass -p ${{secrets.AUTH_PASS}} ssh -o StrictHostKeyChecking=no ${{secrets.AUTH_SERVER}} << EOF
+            docker login ghcr.io -u leifermendez -p ${{secrets.TOKEN_CD_CI}}
+            docker pull ghcr.io/leifermendez/nestjs-curso:latest
+            docker stop nestjs_api && docker rm nestjs_api
+            docker run \
+                --name nestjs_api \
+                -p 3000:3000 \
+                --restart always \
+                -e MAIL_SMTP=${{secrets.ENV_MAIL_SMTP}} \
+                -e JWT_SECRET=${{secrets.ENV_JWT_SECRET}} \
+                -e DB_URI=${{secrets.ENV_DB_URI}} \
+                ghcr.io/leifermendez/nestjs-curso:latest
+          EOF
