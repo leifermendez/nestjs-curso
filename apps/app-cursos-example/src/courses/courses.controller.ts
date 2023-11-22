@@ -10,8 +10,8 @@ import {
   Delete,
   Patch,
   UseInterceptors,
-  CacheInterceptor,
 } from '@nestjs/common';
+import {CacheInterceptor} from '@nestjs/cache-manager'
 import { ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { PaginateV2 } from '../decorators/paginate-v2.decorator';

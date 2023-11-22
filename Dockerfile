@@ -1,34 +1,26 @@
-# Building layer
-FROM node:16-alpine as development
+FROM node:18-alpine AS base
+
+RUN npm i -g pnpm
+
+FROM base AS dependencies
 
 WORKDIR /app
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install
 
-COPY tsconfig*.json ./
-COPY package*.json ./
-COPY nest-cli*.json ./
-
-RUN npm ci
-
-COPY src/ src/
-
-RUN npm run build
-
-# Runtime (production) layer
-FROM node:16-alpine as production
+FROM base AS build
 
 WORKDIR /app
+COPY . .
+COPY --from=dependencies /app/node_modules ./node_modules
+RUN pnpm build
+RUN pnpm prune --prod
 
-# Copy dependencies files
-COPY package*.json ./
+FROM base AS deploy
 
-# Install runtime dependecies (without dev/test dependecies)
-RUN npm ci --omit=dev
-
-# Copy production build
-COPY --from=development /app/dist/ ./dist/
-
-# Expose application port
+WORKDIR /app
+COPY --from=build /app/dist/ ./dist/
+COPY --from=build /app/public/ ./public/
+COPY --from=build /app/node_modules ./node_modules
 EXPOSE 3000
-
-# Start application
-CMD [ "node", "dist/main.js" ]
+CMD [ "node", "dist/apps/app-cursos-example/main.js" ]

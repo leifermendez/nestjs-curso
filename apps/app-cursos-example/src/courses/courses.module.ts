@@ -5,6 +5,7 @@ import { CoursesController } from './courses.controller';
 import { Course, CourseSchema } from './model/courses.schema';
 import { User, UserSchema } from '../users/model/user.schema';
 import { PaginationV2Middleware } from '../middleware/pagination-v2.middleware';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { PaginationV2Middleware } from '../middleware/pagination-v2.middleware';
         },
       },
     ]),
+    CacheModule.register()
   ],
   controllers: [CoursesController],
   providers: [CoursesService],
