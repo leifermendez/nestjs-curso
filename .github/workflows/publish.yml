@@ -57,3 +57,4 @@ jobs:
             -e JWT_SECRET=${{secrets.ENV_JWT_SECRET}} \
             -e DB_URI=${{secrets.ENV_DB_URI}} \
             ghcr.io/leifermendez/nestjs-curso:latest
+          echo "done..."
