@@ -34,19 +34,26 @@ jobs:
 
       - name: SSH into Server
         run: |
-          sshpass -p ${{secrets.AUTH_PASS}} ssh -o StrictHostKeyChecking=no ${{secrets.AUTH_SERVER}} << EOF
-            if docker inspect nestjs_api &> /dev/null; then
-              docker stop nestjs_api
-              docker rm nestjs_api
-            fi
-            docker login ghcr.io -u leifermendez -p ${{secrets.TOKEN_CD_CI}}
-            docker pull ghcr.io/leifermendez/nestjs-curso:latest
-            docker run -d \
-                --name nestjs_api \
-                -p 3000:3000 \
-                --restart always \
-                -e MAIL_SMTP=${{secrets.ENV_MAIL_SMTP}} \
-                -e JWT_SECRET=${{secrets.ENV_JWT_SECRET}} \
-                -e DB_URI=${{secrets.ENV_DB_URI}} \
-                ghcr.io/leifermendez/nestjs-curso:latest
-          EOF
+          echo "Starting SSH script"
+          echo "Checking if container exists..."
+          if docker inspect nestjs_api &> /dev/null; then
+            echo "Container nestjs_api exists, stopping and removing..."
+            docker stop nestjs_api
+            docker rm nestjs_api
+          else
+            echo "Container nestjs_api does not exist."
+          fi
+      
+          echo "Logging into Docker registry..."
+          docker login ghcr.io -u leifermendez -p ${{secrets.TOKEN_CD_CI}}
+          echo "Pulling the latest Docker image..."
+          docker pull ghcr.io/leifermendez/nestjs-curso:latest
+          echo "Running the Docker container..."
+          docker run -d \
+            --name nestjs_api \
+            -p 3000:3000 \
+            --restart always \
+            -e MAIL_SMTP=${{secrets.ENV_MAIL_SMTP}} \
+            -e JWT_SECRET=${{secrets.ENV_JWT_SECRET}} \
+            -e DB_URI=${{secrets.ENV_DB_URI}} \
+            ghcr.io/leifermendez/nestjs-curso:latest
