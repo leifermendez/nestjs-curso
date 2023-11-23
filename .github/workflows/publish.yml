@@ -35,9 +35,12 @@ jobs:
       - name: SSH into Server
         run: |
           sshpass -p ${{secrets.AUTH_PASS}} ssh -o StrictHostKeyChecking=no ${{secrets.AUTH_SERVER}} << EOF
+            if docker inspect nestjs_api &> /dev/null; then
+              docker stop nestjs_api
+              docker rm nestjs_api
+            fi
             docker login ghcr.io -u leifermendez -p ${{secrets.TOKEN_CD_CI}}
             docker pull ghcr.io/leifermendez/nestjs-curso:latest
-            docker stop nestjs_api && docker rm nestjs_api
             docker run -d \
                 --name nestjs_api \
                 -p 3000:3000 \
