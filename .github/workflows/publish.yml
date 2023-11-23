@@ -7,6 +7,30 @@ on:
     branches: ["main"]
 
 jobs:
+  run-tests:
+    needs: create-image-nest
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+
+      - uses: pnpm/action-setup@v2.2.4
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+            node-version: 18.x
+            cache: 'pnpm'
+            registry-url: https://registry.npmjs.org/
+
+      - run: corepack enable
+
+      - name: Install NPM Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Test
+        run: pnpm test
+
   create-image-nest:
     runs-on: ubuntu-latest
     steps:
