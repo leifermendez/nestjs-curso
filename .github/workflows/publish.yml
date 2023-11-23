@@ -8,7 +8,6 @@ on:
 
 jobs:
   run-tests:
-    needs: create-image-nest
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the code
@@ -34,6 +33,7 @@ jobs:
         run: pnpm test
 
   create-image-nest:
+    needs: run-tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the code
