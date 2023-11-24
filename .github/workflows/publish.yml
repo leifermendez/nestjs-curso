@@ -46,7 +46,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.TOKEN_CD_CI }}
 
-      - name: Build image
+      - name: Build docker image
         run: |
             docker build . --tag ghcr.io/leifermendez/nestjs-curso:latest
             docker push ghcr.io/leifermendez/nestjs-curso:latest
@@ -73,9 +73,12 @@ jobs:
         
             echo "Logging into Docker registry..."
             docker login ghcr.io -u leifermendez -p ${{secrets.TOKEN_CD_CI}}
+
             echo "Pulling the latest Docker image..."
             docker pull ghcr.io/leifermendez/nestjs-curso:latest
+
             echo "Running the Docker container..."
+            
             docker run -d \
               --name nestjs_api \
               -p 3000:3000 \
